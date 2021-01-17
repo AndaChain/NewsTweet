@@ -26,14 +26,14 @@ class Twitter_API:
         self.writer = csv.DictWriter( self.csvfile, fieldnames=fieldnames )
         self.writer.writeheader()
 
-    def search(self):
+    def search(self, lang):
         count_ = 0 # it's mean count how many tweet.
         maxId = 0 # starter id
-        while(count_ < 100):
+        while(count_ < 1):
             try:
                 query = "#covid19" # this is word that want to search
-                lang = "en" # language for search
-                count = 10000 # The number of results to try and retrieve per page. 
+                lang = lang # language for search
+                count = 5 # The number of results to try and retrieve per page. 
                 tweet_mode = "extended"
                 result_type = "mixed"
                 data = self.api.search(q=query,
@@ -43,7 +43,7 @@ class Twitter_API:
                                     result_type=result_type,
                                     max_id=str(maxId - 1))
 
-                self.write_csv(data)
+                self.write_csv(data) # Write infor to .csv
 
                 if(len(data)==0):
                     continue
@@ -58,14 +58,7 @@ class Twitter_API:
                     pass
                 
         print("Done",count_)
-
-    def pattern_from(self, template):  
-        repeat = []
-        stack = ""
-        for p in template:
-            stack += p
-            if(stack == template):
-                pass
+        self.csvfile.close()
 
     def write_csv(self, data):
         for infor in data:
