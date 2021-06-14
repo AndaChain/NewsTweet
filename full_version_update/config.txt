@@ -1,0 +1,3 @@
+setTimeUpdate 03:32:00
+twitterUpdate False
+crawlerUpdate True
