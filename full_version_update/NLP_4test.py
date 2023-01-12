@@ -31,7 +31,7 @@ class NLP:
     def __init__(self):
         # ----------------------NLP thai------------------------------------
         # stopwords_th.txt
-        with codecs.open("dataset/stopwords_th.txt", "r") as f:
+        with codecs.open("dataset/stopwords_th.txt", "r", encoding="utf8") as f:
             lines = f.readlines()
         listpos=[e.strip() for e in lines]
         del lines
@@ -40,6 +40,7 @@ class NLP:
         self.stopwords_thai = listpos
 
         modul=self.loadData("Modul")
+        print(modul)
 
         self.classifier = modul[0]
         self.vocabulary = modul[1]
@@ -175,11 +176,15 @@ class NLP:
         dbfile.close()
 
     def loadData(self, name):
-        # for reading also binary mode is important 
-        dbfile = open('dataset/'+name, 'rb')  
-        db = pickle.load(dbfile) 
-        dbfile.close()
-        return db
+        # for reading also binary mode is important
+        try:
+            dbfile = open('dataset/'+name, 'rb')
+            db = pickle.load(dbfile) 
+            dbfile.close()
+            return db
+        except:
+            self.storeData(Mymodul.main(), name)
+            return self.loadData(name)
 
     def clear_name_places(self, in_str):
         # that use in clear places name that contain useless word emoji
@@ -190,7 +195,7 @@ class NLP:
 if __name__ == "__main__":
         s = time.time()
         obj = NLP()
-        obj.storeData(Mymodul.main(), "Modul2")
+        #obj.storeData(Mymodul.main(), "Modul")
         print(time.time()-s)
 
 # ref: https://stackoverflow.com/questions/43388476/how-could-spacy-tokenize-hashtag-as-a-whole
